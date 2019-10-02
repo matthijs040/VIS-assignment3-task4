@@ -76,7 +76,7 @@ class Calibration
     }
 
 
-
+    // NOTE: This function has to run in a loop body due to complications with function scope.
     inline void calibrate(cv::Mat& img)
     {
         cv::Mat result;

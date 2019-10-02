@@ -60,7 +60,7 @@ class ImgTransforms
         return hull;
     }
 
-    convdef_t getConvexityDefects(const contour_t& contour)
+    convdef_t getConvexityDefects(const contour_t& contour) const
     {
         convdef_t defs = convdef_t(contour.size());
         
@@ -108,7 +108,7 @@ class ImgTransforms
     void overlayAllConvexityDefects(cv::Mat filteredImage, cv::Mat imageToOverlay,
                                     cv::Scalar BdrawColour = CV_RGB(255,0,0), 
                                     cv::Scalar EdrawColour = CV_RGB(0,255,0), 
-                                    cv::Scalar FdrawColour = CV_RGB(0,0,255), int drawThickness = 2 ) 
+                                    cv::Scalar FdrawColour = CV_RGB(0,0,255), int drawThickness = 2 ) const
     {
         contours_t contours = getAllContours(filteredImage);    
 
@@ -139,7 +139,7 @@ class ImgTransforms
     void overlayLargestConvexityDefect(cv::Mat filteredImage, cv::Mat imageToOverlay,
                                        cv::Scalar BdrawColour = CV_RGB(255,0,0), 
                                        cv::Scalar EdrawColour = CV_RGB(0,255,0), 
-                                       cv::Scalar FdrawColour = CV_RGB(0,0,255), int drawThickness = 2 ) 
+                                       cv::Scalar FdrawColour = CV_RGB(0,0,255), int drawThickness = 2 ) const
     {
         contour_t contour = getLargestContour(filteredImage);
         convhull_t hull = getConvexHull( contour );

@@ -23,41 +23,34 @@ int main( /* int argc, char const *argv[] */)
     //std::cout << "type = " << c.type2str(src.type()) << '\n';
     //std::cout << "type = " << c.type2str(cvt.type()) << '\n';
 
- 	cv::VideoCapture cap(filename);
-    if(cap.isOpened())
-    {
-        
-        cv::Mat frame, hsvframe, cvtframe;
+ 	cv::Mat img = cv::imread(filename);
+    if(img.data)
+    {        
+        cv::Mat hsv, cvt;
 
+        //Isolate the hand.
+        cv::bitwise_not(img, img);
+        cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
 
-	    while ( cap.read(frame) )
+        while(!c.pressedESC())
+        {  c.calibrate(hsv); }
+       
+
+        cvt = c.useRange(hsv);
+        std::string type = std::string( "type: " + c.type2str(cvt.type() + '\n') );
+        puts ( type.c_str() );
+
+        //cvt = cv::imdecode(cvt, cv::IMREAD_GRAYSCALE);
+        i.overlayLargestContour(cvt, img);
+        i.overlayAllConvexityDefects(cvt, img);
+
+        while(!c.pressedESC())
         {
-            //Isolate the hand.
-            cv::bitwise_not(frame, frame);
-            cv::cvtColor(frame, hsvframe, cv::COLOR_BGR2HSV);
-
-            while( !c.pressedESC() )
-            { c.calibrate(hsvframe); }
-            cvtframe = c.useRange(hsvframe);
-
-            std::string type = std::string( "type: " + c.type2str(cvtframe.type() + '\n') );
-            puts ( type.c_str() );
-
-            //cvtframe = cv::imdecode(cvtframe, cv::IMREAD_GRAYSCALE);
-
-
-
-            i.overlayLargestContour(cvtframe, frame);
-
-
+            cv::imshow("result", img);
             
-
-            i.overlayAllConvexityDefects(cvtframe, frame);
-
-            while(!c.pressedESC())
-            cv::imshow("result", frame);
         }
+        return 0;
+        
     }
-
     return 0;
 }
